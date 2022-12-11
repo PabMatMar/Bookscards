@@ -368,77 +368,64 @@ const books = [
   },
 ]
 
-//PARA EL ANIDAMIENTO USAREMOS VARIABLES QUE DECLAREN CON SU NOMBRE LA POSICION DE ANIDAMIENTO CON RESPECTO AL BODY
+//SE HAN DUPICLADO LAS TARGETAS A POSTA PARA VER COMO QUEDARIA UNA PAGINA CON POR EJEMPLO TREINTAYTANTOS LIBROS
 
-//Declaramos al padre
-const padreBd = document.querySelector("body")
+//Declaramos al padre de todo el contenido que vamos a crear, osea el main.
+const theFather = document.querySelector("main")
 
-//creamos a header, main y footer
-const cabeza = document.createElement("header")
-const cuerpo = document.createElement("main")
-const pie = document.createElement("footer")
-
-//Los anidamos en body (padreBd) y declaramos a main como hijoBd
-padreBd.appendChild(cabeza)
-padreBd.appendChild(cuerpo)
-padreBd.appendChild(pie)
-const hijoBd = document.querySelector('main')
-
-//Creamos el section, lo anidamos en main (hijoBd) y declaramos al seccion como nietoBd
+//Creamos el section, lo anidamos en main (theFather) y declaramos al seccion como secc
 const seccion = document.createElement("section")
-hijoBd.appendChild(seccion)
-const nietoBd = document.querySelector("section")
+theFather.appendChild(seccion)
+const secc = document.querySelector("section")
 
 //Creamos un bucle for que itera tantas veces como objetos tenga el array Books
 for (let i = 0; i < books.length; i++) {
 
-  //Este if crea un div cada tres iteracciones para asi poder usar contenedores flexbox que almacenen los libros de tres en tres (se podria cambiar por otra cantidad)
+  //Este if crea un div cada tres iteracciones para asi poder usar contenedores flexbox que almacenen los articulos(los libros) de tres en tres (se podria cambiar por otra unidad en funcion de media query)
   if (i % 3 == 0) {
     const div03 = document.createElement("div")
-    nietoBd.appendChild(div03)
+    secc.appendChild(div03)
   }
-  //Este if else asigna a la variable indiceDiv el indice del div. Dicho indice sirve para que los articles se aniden en su div correspondiente. No podemos usar i, pues esta va sumando uno cada iteraccion, mientras que el indice del div solo suma 1 cada tres iteracciones.
 
-  //El metodo Math.trunc elimina los decimales del numero
-  let indiceDiv = 0;
-  if (i % 3 == 0) {
-    indiceDiv = i / 3
-  }
-  else {
-    indiceDiv = Math.trunc(i / 3)
-  }
-  const bisnietoBd = document.getElementsByTagName("div")[indiceDiv]
-  //Creamos los articulos, los anidamos en seccion (nietoBd) y declaramos cada articulo  como bisnietoBd 
+  //Los divs se crean cada tres iteraciones. Los articles cada una. Queremos tres articles por div, entonces, para anidarlos le damos a div un indice tres veces menor que el de article(que es el valor de i) y usamos Math.trunc() para eliminar los decimales. Por ejemplo en la quinta iteraccion llevaremos dos divs creados. 5/3 = 1,66 con Math.trunc(5/3) = 1, es decir, el article que se cree en la quinta iteraccion se anidara en el segundo div (indexado con un 1)
+  const contenedorDiv = document.getElementsByTagName("div")[Math.trunc(i / 3)]
+  //Creamos los articulos, los anidamos en seccion (secc) y declaramos cada articulo como artc 
   const articulo = document.createElement("article")
-  bisnietoBd.appendChild(articulo)
-  const tataranietoBd = document.getElementsByTagName("article")[i]
-  //Creamos los elementos de texto e imagen:
+  contenedorDiv.appendChild(articulo)
+  const artc = document.getElementsByTagName("article")[i]
+  //Creamos los elementos de texto e imagen y los declaramos como lo que son:
   const titulo = document.createElement("h3")
   const autor = document.createElement("p")
   const pais = document.createElement("p")
   const portada = document.createElement("img")
   const idioma = document.createElement("p")
   const año = document.createElement("p")
-  //Los anidamos en article (bisnietoBd):
-  tataranietoBd.appendChild(titulo)
-  tataranietoBd.appendChild(autor)
-  tataranietoBd.appendChild(pais)
-  tataranietoBd.appendChild(portada)
-  tataranietoBd.appendChild(idioma)
-  tataranietoBd.appendChild(año)
+  const link = document.createElement("a")
+  const textoLink = document.createTextNode("Enlace a wikipedia")
+  //Los anidamos en artc salvo textoLink que lo anidamos en link:
+  artc.appendChild(titulo)
+  artc.appendChild(autor)
+  artc.appendChild(pais)
+  artc.appendChild(idioma)
+  artc.appendChild(portada)
+  artc.appendChild(año)
+  artc.appendChild(link)
+  link.appendChild(textoLink)
+
 
   //Le damos valor a cada elemento de texto e imagen
 
   titulo.innerHTML = books[i].title
-  autor.innerHTML = "Author: " + books[i].author
-  pais.innerHTML = "Country: " + books[i].country
+  autor.innerHTML = "Author: " + "\n" + books[i].author
+  pais.innerHTML = "Country: " + "\n" + books[i].country
   portada.src = books[i].imageLink
-  idioma.innerHTML = "Language: " + books[i].language
-  año.innerHTML = "Year: " + books[i].year
+  idioma.innerHTML = "Language: " + "\n" + books[i].language
+  año.innerHTML = "Year: " + "\n" + books[i].year
+  link.href = books[i].link
+  //Para el link creamos un atributo target y le damos un valor _blank, de esta forma cuando clicen en el link se abrira en otra pestaña en lugar de en la de nuestra pagina.
+  link.setAttribute("target", "_blank")
 }
-
-
-//La funcion Cuadrar articulo crea articulos en caso de que el indice de books(numero de targetas) no sea multiplo de tres, de esta forma flex box cuadra los elementos todos con el mismo tamaño.
+//La funcion Cuadrar articulo crea articulos en caso de que el indice de books(numero de targetas) no sea multiplo de tres, para asi tener siempre tres articulos en cada bloque aunque dos o uno esten vacios, de esta forma flex box cuadra los elementos todos con el mismo tamaño gracias a la propiedad flex, del flex grow (establecida en 1 para cada art dentro del div)
 let y = Math.trunc((books.length) / 3)
 
 const bisnietoBd2 = document.getElementsByTagName("div")[y]
@@ -461,11 +448,3 @@ function cuadrarArticulo() {
 
 }
 cuadrarArticulo()
-
-
-
-
-
-
-
-
